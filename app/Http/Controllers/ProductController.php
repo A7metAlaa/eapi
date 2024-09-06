@@ -6,17 +6,21 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\Product\ProductResources;
+use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    // public function test($id){
+    //     return new ProductCollection(Product::findOrFail($id));
+    // }
     public function index()
     {
-       
-        return  Product::all();
-    }
+        // dd(Product::all());
+         return  ProductCollection::collection(Product::all());
+     }
 
     /**
      * Show the form for creating a new resource.
@@ -39,16 +43,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-    try {
-
-           if ($product->reviews->count() > 0){
-                 return new ProductResources($product);
-            }else{
-                return response()->json(['error' => 'product ID not found'], 400);
-             }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-           };
+        return new ProductResources($product);
+        
  
     }
 

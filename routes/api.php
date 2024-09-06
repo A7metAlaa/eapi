@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Resources\Product\ProductCollection;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::Resource('/products',ProductController::class);
 
+// Route::get('/test/{id}', function (string $id) {
+//     return new ProductCollection(Product::find($id));
+// });
 Route::group(['prefix'=>'products'],function(){
     Route::apiResource('/{product}/reviews',ReviewController::class);
-    //Matches /product/12/reviews
+    // Matches /api/product/12/reviews
 });
