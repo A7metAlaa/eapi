@@ -14,7 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+       
+        return  Product::all();
     }
 
     /**
@@ -38,8 +39,17 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        // return $product;
-        return new ProductResources($product);
+    try {
+
+           if ($product->reviews->count() > 0){
+                 return new ProductResources($product);
+            }else{
+                return response()->json(['error' => 'product ID not found'], 400);
+             }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+           };
+ 
     }
 
     /**

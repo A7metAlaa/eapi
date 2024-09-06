@@ -24,4 +24,5 @@ Route::Resource('/products',ProductController::class);
 
 Route::group(['prefix'=>'products'],function(){
     Route::apiResource('/{product}/reviews',ReviewController::class);
+    //Matches /product/12/reviews
 });
