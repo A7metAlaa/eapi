@@ -1,0 +1,5 @@
+Authentcation usign Laravel ui 
+api authenitcation usign passport ui 
+products tabel 
+reviews tabel
+relationship between two tables via reviews Id + product_id column in products tables
