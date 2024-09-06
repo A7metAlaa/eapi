@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         // dd(Product::all());
-         return  ProductCollection::collection(Product::all());
+         return  ProductCollection::collection(Product::paginate(5));
      }
 
     /**
