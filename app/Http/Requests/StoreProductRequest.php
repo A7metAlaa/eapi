@@ -11,7 +11,8 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check(); // Allow access if the user is authenticated
+        // return false;
     }
 
     /**
@@ -22,7 +23,11 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|max:255', // Correct usage
+            'description'=>'required',
+             'price'=>'required|max:10',
+             'stock'=>'required|max:6',
+             'discount'=>'required|max:2',
         ];
     }
 }

@@ -14,6 +14,7 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
+  
     public function index(Product $product)
     {
         

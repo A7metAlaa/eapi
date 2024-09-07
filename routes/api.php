@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Resources\Product\ProductCollection;
@@ -19,14 +20,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+
     return $request->user();
 });
 
 Route::Resource('/products',ProductController::class);
+ 
 
-// Route::get('/test/{id}', function (string $id) {
-//     return new ProductCollection(Product::find($id));
-// });
+ 
+ 
 Route::group(['prefix'=>'products'],function(){
     Route::apiResource('/{product}/reviews',ReviewController::class);
     // Matches /api/product/12/reviews

@@ -7,17 +7,23 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\Product\ProductResources;
 use App\Http\Resources\ProductCollection;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    // public function test($id){
-    //     return new ProductCollection(Product::findOrFail($id));
-    // }
+   
+
+    //prevent members to delete Create products 
+    public function __construct(){
+      
+        $this->middleware('auth:api')->except('index','show');
+    }
     public function index()
     {
+     
         // dd(Product::all());
          return  ProductCollection::collection(Product::paginate(5));
      }
@@ -35,7 +41,18 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        $product = new Product;
+       $product->name = $request->name;
+       $product->detail = $request->description;
+       $product->stock = $request->stock;
+       $product->price = $request->price;
+       $product->discount = $request->discount;
+       $product->save();
+       return response([
+        'data'=> new ProductResources($product)
+       ],200);
+        return $request->all();
+       
     }
 
     /**
@@ -60,9 +77,16 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateProductRequest $request, Product $product)
-    {
-        //
+    {   
+        $request['detail'] = $request->description;
+        unset($request['description']);
+        $product->update($request->all());
+
+
+        return response([ 'data'=> new ProductResources($product)
+           ],200);
     }
+
 
     /**
      * Remove the specified resource from storage.
