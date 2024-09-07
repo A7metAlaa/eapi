@@ -81,8 +81,6 @@ class ProductController extends Controller
         $request['detail'] = $request->description;
         unset($request['description']);
         $product->update($request->all());
-
-
         return response([ 'data'=> new ProductResources($product)
            ],200);
     }
@@ -92,7 +90,9 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Product $product)
-    {
-        //
+    {   
+        $product->delete();
+         
+      return response('Product Detetd Successfully', 204);
     }
 }
