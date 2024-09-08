@@ -2,7 +2,12 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -12,8 +17,6 @@ class Handler extends ExceptionHandler
      *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
-
-     
     protected $levels = [
         //
     ];
@@ -43,10 +46,31 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        
+        $this->renderable(function (NotFoundHttpException $e , Request $request) {
+            if ($request->wantsJson()) {
+               
+                return response()->json(['message' => $e->getMessage()], 404);
+             }
+        });
+      
+
+        $this->renderable(function(AuthorizationException  $e , Request $request) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'unauthrization'], 403);
+            }
+        });
+
+        $this->renderable(function(AuthenticationException  $e , Request $request) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'unauthentication'], 401);
+            }
+        });
+
+        $this->renderable(function(Throwable $e , Request $request) {
+            if ($request->wantsJson() && config('app.debug') == false) {
+                return response()->json(['message' => 'Server Error'], 500);
+            }
         });
     }
-
-    
 }

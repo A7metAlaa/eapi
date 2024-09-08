@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\Product\ProductResources;
 use App\Http\Resources\ProductCollection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -60,8 +61,16 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResources($product);
-        
+
+        try {
+            return new ProductResources($product);
+        }catch(ModelNotFoundException $e){
+            return response()->json(['error' => 'Product not found'], 404);
+
+        }
+
+
+         
  
     }
 
@@ -93,6 +102,6 @@ class ProductController extends Controller
     {   
         $product->delete();
          
-      return response('Product Detetd Successfully', 204);
+    return response('Product Detetd Successfully', 204);
     }
 }
