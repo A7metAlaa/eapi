@@ -104,4 +104,11 @@ class ProductController extends Controller
          
     return response('Product Detetd Successfully', 204);
     }
+
+    public function ProductUsercheck( $product)
+    {       
+        
+         
+     
+    }
 }
